@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Usuario, Jugador, Staff, Equipo, Invitacion
+from .models import Enfrentamiento, Fase, Usuario, Jugador, Staff, Equipo, Invitacion
 
 # Modelos registrados en Django Admin
 
@@ -24,3 +24,14 @@ class InvitacionAdmin(admin.ModelAdmin):
     list_display = ('equipo', 'jugador_invitado', 'aceptada')
     list_filter = ('aceptada',)
     search_fields = ('equipo__nombre', 'jugador_invitado__nombre')
+
+@admin.register(Fase)
+class FaseAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'orden')
+    search_fields = ('nombre',)
+
+@admin.register(Enfrentamiento)
+class EnfrentamientoAdmin(admin.ModelAdmin):
+    list_display = ('fase', 'equipo1', 'equipo2', 'fecha', 'completado', 'ganador')
+    list_filter = ('fase', 'completado')
+    search_fields = ('equipo1__nombre', 'equipo2__nombre')
