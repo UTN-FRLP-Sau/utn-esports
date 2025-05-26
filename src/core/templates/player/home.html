@@ -18,6 +18,14 @@
     {% else %}
     <p class="consejo">Recuerda que para poder participar en el torneo, tu equipo debe ser aprobado por los administradores. Para esto, deberás realizar el pago correspondiente y enviar el comprobante de pago tocando el boton 'Pagar' (el boton de pagar aparecera cuando se habiliten los pagos de las inscripciones, te informaremos por el correo oficial cuando se habiliten). Una vez enviado podrás hacer el seguimiento del estado de tu equipo viendo el 'Estado de aprobación'.</p>
     {% endif %}
+    <a href="{% url 'ver_competencia' %}">
+        <button type="button">Ver Competencia</button>
+    </a>
+
+
+
+
+
 
     <!-- Muestra el equipo creado -->
     {% if jugador.equipo %}
