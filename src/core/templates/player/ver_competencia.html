@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/player/home.css' %}">
+<style>
+.profile-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.tournament-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.tournament-header h2 {
+    font-size: 2.2rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.tournament-header p {
+    color: #ffffff;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.fase-container {
+    margin-bottom: 3.5rem;
+    background: #040404cc;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.fase-header {
+    background: linear-gradient(135deg, #db349b, #1d77cc);
+    color: white;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fase-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.fase-status {
+    background: rgb(11 11 11 / 87%);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.matches-container {
+    padding: 1.5rem;
+}
+
+.match-card {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #000000a3;
+    background: #0000009c;
+    transition: all 0.3s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background: rgb(0, 0, 0);
+}
+
+.match-card.my-team {
+    border-left: 4px solid #000000a3;
+    background: #0000009c;
+}
+
+.match-teams {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.team.my-team {
+    color: #ff00c6;
+    font-weight: 600;
+}
+
+.vs-separator {
+    color: #95a5a6;
+    font-weight: 300;
+    padding: 0 0.5rem;
+}
+
+.match-result {
+    min-width: 160px;
+    text-align: right;
+}
+
+.result-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.result-pending {
+    color: #f1b80a;
+    font-size: large;
+}
+
+.result-winner {
+    color: #23a928;
+    font-size: large;
+}
+
+.result-loser {
+    color: #cb1c1c;
+    font-size: large;
+}
+
+.result-draw {
+    color: #383d41;
+    font-size: large;
+}
+
+.match-date {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 2rem;
+    color: #95a5a6;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .match-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .match-result {
+        text-align: left;
+        margin-top: 1rem;
+        width: 100%;
+    }
+    
+    .result-badge {
+        display: block;
+        text-align: center;
+    }
+    
+    .fase-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .fase-status {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 0 1rem;
+    }
+    
+    .tournament-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .team {
+        flex: 1 1 100%;
+    }
+    
+    .vs-separator {
+        display: none;
+    }
+    
+    .match-teams {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="profile-container">
+    <div class="tournament-header">
+        <h2>Leyendas del Sur</h2>
+        <p>Visualizá los enfrentamientos y resultados del torneo. Los partidos de tu equipo están resaltados en azul.</p>
+    </div>
+
+    {% if fases_y_enfrentamientos %}
+        {% for item in fases_y_enfrentamientos %}
+        <div class="fase-container">
+            <div class="fase-header">
+                <h3 class="fase-title">{{ item.fase.nombre }}</h3>
+                <span class="fase-status">
+                    {% if item.fase.completada %}Fase completada{% else %}En progreso{% endif %}
+                </span>
+            </div>
+            
+            <div class="matches-container">
+                {% if item.enfrentamientos %}
+                    {% for match in item.enfrentamientos %}
+                    <div class="match-card {% if match.equipo1.id == jugador.equipo.id or match.equipo2.id == jugador.equipo.id %}my-team{% endif %}">
+                        <div class="match-teams">
+                            <span class="team {% if match.equipo1.id == jugador.equipo.id %}my-team{% endif %}">
+                                {{ match.equipo1.nombre }}
+                            </span>
+                            <span class="vs-separator">vs</span>
+                            <span class="team {% if match.equipo2.id == jugador.equipo.id %}my-team{% endif %}">
+                                {{ match.equipo2.nombre }}
+                            </span>
+                            {% if match.fecha %}
+                                <span class="match-date">
+                                    {{ match.fecha|date:"d/m/Y H:i" }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="match-result">
+                            {% if match.completado %}
+                                {% if match.ganador %}
+                                    {% if match.ganador.id == jugador.equipo.id %}
+                                        <span class="result-badge result-winner">Ganaste</span>
+                                    {% elif match.equipo1.id == jugador.equipo.id or match.equipo2.id == jugador.equipo.id %}
+                                        <span class="result-badge result-loser">Perdiste</span>
+                                    {% else %}
+                                        <span class="result-badge result-winner">Ganó {{ match.ganador.nombre_abreviado|default:match.ganador.nombre }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="result-badge result-draw">Empate</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="result-badge result-pending">Pendiente</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-message">No hay enfrentamientos programados para esta fase.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-message">
+            <p>El torneo aún no ha comenzado. No hay fases creadas.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
