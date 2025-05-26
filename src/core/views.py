@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from django.db import DatabaseError
 from django.forms import ValidationError
@@ -7,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
-from .models import Equipo, EstadoAprobacion, Invitacion, Jugador, Staff, TwitchClip
+from .models import Enfrentamiento, Equipo, EstadoAprobacion, Fase, Invitacion, Jugador, Staff, TwitchClip
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -852,3 +853,84 @@ class CambiarEstadoInscripcionesView(LoginRequiredMixin, StaffRequiredMixin, Vie
             messages.error(request, f"Error: {e}")
         
         return redirect('staff_home')
+    
+class VerCompetenciaView(LoginRequiredMixin, TemplateView):
+    template_name = 'player/ver_competencia.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        jugador = self.request.user.jugador
+        fases = Fase.objects.order_by('orden')
+
+        lista_fases_y_enfrentamientos = [
+            {
+                'fase': fase,
+                'enfrentamientos': Enfrentamiento.objects.filter(fase=fase).select_related('equipo1', 'equipo2', 'ganador')
+            }
+            for fase in fases
+        ]
+
+        context['jugador'] = jugador
+        context['fases_y_enfrentamientos'] = lista_fases_y_enfrentamientos
+
+        return context
+
+
+class GestionarCompetenciaView(LoginRequiredMixin, StaffRequiredMixin, TemplateView):
+    template_name = 'staff/gestionar_competencia.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fases'] = Fase.objects.order_by('orden')
+        context['equipos'] = Equipo.objects.all()
+        return context
+
+class CrearFaseView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request):
+        nombre = request.POST.get("nombre")
+        orden = request.POST.get("orden")
+        Fase.objects.create(nombre=nombre, orden=orden)
+        return redirect('gestionar_competencia')
+
+class CrearEnfrentamientoView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request):
+        fase_id = request.POST.get("fase")
+        equipo1_id = request.POST.get("equipo1")
+        equipo2_id = request.POST.get("equipo2")
+        fecha_str = request.POST.get('fecha')
+
+        fase = Fase.objects.get(pk=fase_id)
+        equipo1 = Equipo.objects.get(pk=equipo1_id)
+        equipo2 = Equipo.objects.get(pk=equipo2_id)
+        fecha = datetime.fromisoformat(fecha_str) if fecha_str else None
+
+        Enfrentamiento.objects.create(fase=fase, equipo1=equipo1, equipo2=equipo2, fecha=fecha)
+        
+        return redirect('gestionar_competencia')
+
+class AsignarGanadorView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, enfrentamiento_id):
+        ganador_id = request.POST.get("ganador")
+        enfrentamiento = Enfrentamiento.objects.get(pk=enfrentamiento_id)
+        enfrentamiento.ganador_id = ganador_id
+        enfrentamiento.completado = True
+        enfrentamiento.save()
+        id_ancla = request.POST.get('volver_a', '')
+        url = reverse('gestionar_competencia')
+        if id_ancla:
+            url += f"#{id_ancla}"
+        return redirect(url)
+
+
+class EliminarFaseView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, pk):
+        fase = get_object_or_404(Fase, pk=pk)
+        fase.delete()
+        return redirect('gestionar_competencia')
+
+class EliminarEnfrentamientoView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, pk):
+        enfrentamiento = get_object_or_404(Enfrentamiento, pk=pk)
+        enfrentamiento.delete()
+        return redirect('gestionar_competencia')

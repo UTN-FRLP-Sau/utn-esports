@@ -23,6 +23,7 @@ urlpatterns = [
     path('player/pagar_inscripcion/<int:equipo_id>/', views.PagarInscripcionView.as_view(), name='pagar_inscripcion'),
     path('player/eliminar_jugador/<int:jugador_id>/', views.EliminarJugadorView.as_view(), name='eliminar_jugador'),
     path('player/inscripcion_deshabilitada/', views.InscripcionDeshabilitadaView.as_view(), name='inscripcion_deshabilitada'),
+    path('player/ver_competencia/', views.VerCompetenciaView.as_view(), name='ver_competencia'),
 
     # Invitaciones
     path('player/invitar/<int:equipo_id>/', views.InvitarJugadorView.as_view(), name='invitar_jugador'),
@@ -33,7 +34,15 @@ urlpatterns = [
     path('staff/home/', views.StaffHomeView.as_view(), name='staff_home'),
     path('staff/obtener_integrantes/<int:equipo_id>/', views.ObtenerIntegrantesView.as_view(), name='obtener_integrantes'),
     path('staff/cambiar_permiso_edicion_perfil/', views.CambiarPermisoEdicionPerfilView.as_view(), name='cambiar_permiso_edicion_perfil'),
-     path('staff/cambiar_estado_inscripciones/', views.CambiarEstadoInscripcionesView.as_view(), name='cambiar_estado_inscripciones'),
+    path('staff/cambiar_estado_inscripciones/', views.CambiarEstadoInscripcionesView.as_view(), name='cambiar_estado_inscripciones'),
+    
+    path('staff/gestionar_competencia/', views.GestionarCompetenciaView.as_view(), name='gestionar_competencia'),
+    path('staff/crear_fase/', views.CrearFaseView.as_view(), name='crear_fase'),
+    path('staff/crear_enfrentamiento/', views.CrearEnfrentamientoView.as_view(), name='crear_enfrentamiento'),
+    path('staff/asignar_ganador/<int:enfrentamiento_id>/', views.AsignarGanadorView.as_view(), name='asignar_ganador'),
+    path('eliminar_fase/<int:pk>/', views.EliminarFaseView.as_view(), name='eliminar_fase'),
+    path('eliminar_enfrentamiento/<int:pk>/', views.EliminarEnfrentamientoView.as_view(), name='eliminar_enfrentamiento'),
+    
     # Clips Twitch
     path('staff/gestionar_clips/', views.GestionarClipsView.as_view(), name='gestionar_clips'),
     path('staff/cambiar_estado_clip/<int:clip_id>/', views.CambiarEstadoClipView.as_view(), name='cambiar_estado_clip'),
