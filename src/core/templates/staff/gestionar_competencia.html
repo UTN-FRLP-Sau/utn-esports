@@ -1,0 +1,502 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/staff/home.css' %}">
+<style>
+.staff-home-container {
+    padding: 1.5rem 2rem;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 10px;
+    color: #f0f0f0;
+    max-width: 900px;
+    margin: 1rem auto;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(50, 50, 50, 0.8);
+    border-radius: 10px;
+}
+
+.form-section h3 {
+    margin-bottom: 1.5rem;
+    color: #ffb703;
+    font-size: 1.3rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-control, select {
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: 1px solid #555;
+    width: 100%;
+    font-size: 1rem;
+    background: #222;
+    color: #eee;
+    transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+.form-control:focus, select:focus {
+    outline: none;
+    border-color: #ffb703;
+    background: #333;
+    color: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 183, 3, 0.2);
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    background-color: #ffb703;
+    border: none;
+    color: #222;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.btn:hover {
+    background-color: #e09c03;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #b02a37;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.fase-container {
+    margin-top: 2rem;
+    background: rgba(50, 50, 50, 0.8);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.fase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.match-card {
+    padding: 1rem;
+    border: 1px solid rgba(255, 183, 3, 0.3);
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #f0f0f0;
+    background: rgba(30, 30, 30, 0.85);
+    flex-wrap: wrap;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.match-card:hover {
+    border-color: #ffb703;
+    box-shadow: 0 2px 8px rgba(255, 183, 3, 0.1);
+}
+
+.match-info {
+    flex: 1 1 200px;
+    font-weight: 600;
+    min-width: 200px;
+}
+
+.match-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+form.match-form {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin: 0;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.match-form select.form-control {
+    width: auto;
+    min-width: 160px;
+    flex: 1;
+}
+
+.form-eliminar-enfrentamiento {
+    margin: 0;
+}
+
+.btn-eliminar-enfrentamiento {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #dc3545;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+.btn-eliminar-enfrentamiento:hover {
+    color: #a71d2a;
+    background-color: rgba(220, 53, 69, 0.1);
+    transform: scale(1.1);
+}
+
+.empty-message {
+    color: #aaa;
+    font-style: italic;
+    padding: 1rem 0;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background: #222;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto;
+    color: #eee;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border: 1px solid #444;
+}
+
+.modal h3 {
+    margin-top: 0;
+    color: #ffb703;
+    margin-bottom: 1.5rem;
+}
+
+.modal p {
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .staff-home-container {
+        padding: 1rem;
+    }
+    
+    .fase-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .match-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .match-actions {
+        width: 100%;
+    }
+    
+    form.match-form {
+        width: 100%;
+    }
+    
+    .match-form select.form-control {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .modal-buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-section {
+        padding: 1rem;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="staff-home-container">
+    <h1>Gestión de Competencia</h1>
+    <hr>
+
+    <div class="form-section">
+        <h3>Agregar Fase</h3>
+        <form method="post" action="{% url 'crear_fase' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <select name="nombre" class="form-control" required>
+                    <option value="" disabled selected>Selecciona una fase</option>
+                    <option value="Fase de Grupos">Fase de Grupos</option>
+                    <option value="Cuartos de Final">Cuartos de Final</option>
+                    <option value="Semifinal">Semifinal</option>
+                    <option value="Final">Final</option>
+                    <option value="OTRA">Otra</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="number" name="orden" placeholder="Orden de la fase" class="form-control" required>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn">Agregar Fase</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="form-section">
+        <h3>Crear Enfrentamiento</h3>
+        <form method="post" action="{% url 'crear_enfrentamiento' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <select name="fase" class="form-control" required>
+                    <option value="" disabled selected>Seleccionar fase</option>
+                    {% for fase in fases %}
+                        <option value="{{ fase.id }}">{{ fase.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="equipo1" class="form-control" required>
+                    <option value="" disabled selected>Seleccionar equipo 1</option>
+                    {% for equipo in equipos %}
+                        <option value="{{ equipo.id }}">{{ equipo.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="equipo2" class="form-control" required>
+                    <option value="" disabled selected>Seleccionar equipo 2</option>
+                    {% for equipo in equipos %}
+                        <option value="{{ equipo.id }}">{{ equipo.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="datetime-local" name="fecha" class="form-control" required>
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn">Crear Enfrentamiento</button>
+            </div>
+        </form>
+    </div>
+
+    {% for fase in fases %}
+    <div class="fase-container">
+        <div class="fase-header">
+            <h3>{{ fase.nombre }}</h3>
+            <button 
+                class="btn btn-danger btn-sm btn-eliminar-fase" 
+                data-fase-id="{{ fase.id }}" 
+                data-fase-nombre="{{ fase.nombre }}">
+                Eliminar Fase
+            </button>
+        </div>
+
+        {% for match in fase.enfrentamientos.all %}
+        <div class="match-card" id="match-{{ match.id }}">
+            <div class="match-info">
+                <strong>{{ match.equipo1.nombre }}</strong> vs <strong>{{ match.equipo2.nombre }}</strong>
+                {% if match.completado %} 
+                <div style="margin-top: 0.5rem; color: #ffb703;">
+                    Ganador: {{ match.ganador.nombre }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="match-actions">
+                <form method="post" action="{% url 'asignar_ganador' match.id %}" class="match-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="volver_a" value="match-{{ match.id }}">
+                    <select name="ganador" class="form-control" required>
+                        <option value="" disabled selected>Seleccionar ganador</option>
+                        <option value="{{ match.equipo1.id }}">{{ match.equipo1.nombre }}</option>
+                        <option value="{{ match.equipo2.id }}">{{ match.equipo2.nombre }}</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm">Asignar</button>
+                </form>
+
+                <form method="post" action="{% url 'eliminar_enfrentamiento' match.id %}" class="form-eliminar-enfrentamiento">
+                    {% csrf_token %}
+                    <button type="button" class="btn-eliminar-enfrentamiento" 
+                        data-match-id="{{ match.id }}" 
+                        data-match-info="{{ match.equipo1.nombre }} vs {{ match.equipo2.nombre }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-message">No hay enfrentamientos en esta fase.</p>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal para eliminar fase -->
+<div id="modalEliminarFase" class="modal">
+    <div class="modal-content">
+        <h3>Confirmar Eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar la fase <strong id="nombreFaseModal"></strong>? Esta acción no se puede deshacer.</p>
+        <form id="formEliminarFase" method="post" action="">
+            {% csrf_token %}
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para eliminar enfrentamiento -->
+<div id="modalEliminarEnfrentamiento" class="modal">
+    <div class="modal-content">
+        <h3>Confirmar Eliminación</h3>
+        <p>¿Estás seguro de que deseas eliminar el enfrentamiento <strong id="infoMatchModal"></strong>? Esta acción no se puede deshacer.</p>
+        <form id="formEliminarEnfrentamiento" method="post" action="">
+            {% csrf_token %}
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Modal eliminar fase
+    const modalFase = document.getElementById('modalEliminarFase');
+    const nombreFaseModal = document.getElementById('nombreFaseModal');
+    const formEliminarFase = document.getElementById('formEliminarFase');
+
+    document.querySelectorAll('.btn-eliminar-fase').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const faseId = btn.getAttribute('data-fase-id');
+            const faseNombre = btn.getAttribute('data-fase-nombre');
+            nombreFaseModal.textContent = faseNombre;
+            formEliminarFase.action = `/eliminar_fase/${faseId}/`;
+            modalFase.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Modal eliminar enfrentamiento
+    const modalMatch = document.getElementById('modalEliminarEnfrentamiento');
+    const infoMatchModal = document.getElementById('infoMatchModal');
+    const formEliminarMatch = document.getElementById('formEliminarEnfrentamiento');
+
+    document.querySelectorAll('.btn-eliminar-enfrentamiento').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const matchId = btn.getAttribute('data-match-id');
+            const matchInfo = btn.getAttribute('data-match-info');
+            infoMatchModal.textContent = matchInfo;
+            formEliminarMatch.action = `/eliminar_enfrentamiento/${matchId}/`;
+            modalMatch.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Cerrar modals
+    document.querySelectorAll('.btn-cancelar').forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalFase.style.display = 'none';
+            modalMatch.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Cerrar modals al click fuera del contenido
+    window.addEventListener('click', (event) => {
+        if (event.target === modalFase) {
+            modalFase.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (event.target === modalMatch) {
+            modalMatch.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+});
+</script>
+{% endblock %}
