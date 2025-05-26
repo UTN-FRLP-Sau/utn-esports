@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.contrib.auth.models import User
 import os
 from uuid import uuid4
@@ -147,3 +148,104 @@ class TwitchClip(models.Model):
         """
         clip_id = self.url.split('/')[-1]  # Extrae el ID del clip de la URL
         return f"https://clips.twitch.tv/embed?clip={clip_id}&parent=127.0.0.1"
+    
+
+#####################################################################################################################
+################## Sistema de competencia ###########################################################################
+#####################################################################################################################
+
+
+#Define una etapa del torneo (Grupo A, Grupo B, Cuartos de Final, etc.)
+class Fase(models.Model):
+    NOMBRE_CHOICES = [
+        ('GRUPO', 'Fase de Grupos'),
+        ('QF', 'Cuartos de Final'),
+        ('SF', 'Semifinal'),
+        ('FI', 'Final'),
+        ('OTRA', 'Otra'),
+    ]
+
+    nombre = models.CharField(max_length=20, choices=NOMBRE_CHOICES)
+    descripcion = models.TextField(blank=True)
+    grupo = models.CharField(max_length=1, blank=True, null=True)  # A, B, C... solo para fase de grupos
+    es_eliminatoria = models.BooleanField(default=False)
+    orden = models.PositiveIntegerField(help_text="Orden cronológico de la fase")
+
+    def __str__(self):
+        if self.grupo:
+            return f"{self.get_nombre_display()} - Grupo {self.grupo}"
+        return self.get_nombre_display()
+
+
+# Representa un partido entre dos equipos (puede ser Bo1 o Bo3).
+class Enfrentamiento(models.Model):
+    fase = models.ForeignKey(Fase, on_delete=models.CASCADE, related_name='enfrentamientos')
+    equipo1 = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='enfrentamientos_como_local')
+    equipo2 = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='enfrentamientos_como_visitante')
+    fecha = models.DateTimeField()
+    best_of = models.PositiveIntegerField(default=1)  # 1 para Bo1, 3 para Bo3
+    completado = models.BooleanField(default=False)
+    ganador = models.ForeignKey(Equipo, on_delete=models.SET_NULL, null=True, blank=True, related_name='enfrentamientos_ganados')
+
+    def __str__(self):
+        return f"{self.equipo1} vs {self.equipo2} - {self.fase}"
+
+# Representa una partida individual dentro de un enfrentamiento (sirve para Bo3).
+class Partida(models.Model):
+    enfrentamiento = models.ForeignKey(Enfrentamiento, on_delete=models.CASCADE, related_name='partidas')
+    numero = models.PositiveIntegerField()  # 1, 2, 3...
+    equipo_ganador = models.ForeignKey(Equipo, on_delete=models.SET_NULL, null=True, blank=True, related_name='partidas_ganadas')
+    duracion = models.DurationField(null=True, blank=True)
+    link_replay = models.URLField(blank=True, null=True, help_text="Enlace a la repetición o video")
+
+    def __str__(self):
+        return f"Partida {self.numero} - {self.enfrentamiento}"
+
+
+class ClasificacionGrupo(models.Model):
+    equipo = models.ForeignKey('Equipo', on_delete=models.CASCADE)
+    grupo = models.CharField(max_length=1)  # A, B, C, etc.
+    victorias = models.PositiveIntegerField(default=0)
+    derrotas = models.PositiveIntegerField(default=0)
+    partidas_jugadas = models.PositiveIntegerField(default=0)
+    oro_total = models.PositiveIntegerField(default=0)
+    torres_destruidas = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('equipo', 'grupo')
+
+    def __str__(self):
+        return f"{self.equipo.nombre} (Grupo {self.grupo})"
+    
+
+def actualizar_clasificacion(enfrentamiento):
+    fase = enfrentamiento.fase
+    if not fase or not fase.grupo:
+        return  # solo aplica a fases con grupo (fase de grupos)
+
+    grupo = fase.grupo
+    equipo1 = enfrentamiento.equipo1
+    equipo2 = enfrentamiento.equipo2
+    ganador = enfrentamiento.ganador
+    perdedor = equipo1 if equipo2 == ganador else equipo2
+
+    for equipo in [equipo1, equipo2]:
+        ClasificacionGrupo.objects.get_or_create(equipo=equipo, grupo=grupo)
+
+    # Actualizar partidas jugadas
+    ClasificacionGrupo.objects.filter(equipo=equipo1, grupo=grupo).update(partidas_jugadas=F('partidas_jugadas') + 1)
+    ClasificacionGrupo.objects.filter(equipo=equipo2, grupo=grupo).update(partidas_jugadas=F('partidas_jugadas') + 1)
+
+    # Actualizar victorias/derrotas
+    ClasificacionGrupo.objects.filter(equipo=ganador, grupo=grupo).update(victorias=F('victorias') + 1)
+    ClasificacionGrupo.objects.filter(equipo=perdedor, grupo=grupo).update(derrotas=F('derrotas') + 1)
+
+    # 
+    # partidas = enfrentamiento.partidas.all()
+    # oro_ganador = sum([getattr(p, 'oro_equipo1' if p.equipo_ganador == equipo1 else 'oro_equipo2', 0) for p in partidas])
+    # torres_ganador = sum([getattr(p, 'torres_equipo1' if p.equipo_ganador == equipo1 else 'torres_equipo2', 0) for p in partidas])
+
+    # ClasificacionGrupo.objects.filter(equipo=ganador, grupo=grupo).update(
+    #     oro_total=F('oro_total') + oro_ganador,
+    #     torres_destruidas=F('torres_destruidas') + torres_ganador
+    # )
