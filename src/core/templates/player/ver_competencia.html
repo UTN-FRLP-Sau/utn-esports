@@ -6,7 +6,7 @@
 <style>
 .profile-container {
     max-width: 900px;
-    margin: 2rem auto;
+    padding: 15px !important;
     padding: 0 1.5rem;
 }
 
@@ -226,7 +226,13 @@
             <div class="fase-header">
                 <h3 class="fase-title">{{ item.fase.nombre }}</h3>
                 <span class="fase-status">
-                    {% if item.fase.completada %}Fase completada{% else %}En progreso{% endif %}
+                    {% if item.fase.no_comenzo %}
+                        Aún no comenzó
+                    {% elif item.fase.completada %}
+                        Fase completada
+                    {% else %}
+                        En progreso
+                    {% endif %}
                 </span>
             </div>
             
