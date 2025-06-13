@@ -4,6 +4,12 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/staff/home.css' %}">
 <style>
+body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+}
+
 .staff-home-container {
     padding: 1.5rem 2rem;
     background: rgba(30, 30, 30, 0.9);
@@ -113,6 +119,7 @@
     gap: 1rem;
 }
 
+/* --- Mejoras para match-card --- */
 .match-card {
     padding: 1rem;
     border: 1px solid rgba(255, 183, 3, 0.3);
@@ -120,11 +127,11 @@
     border-radius: 5px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Alinea los elementos al inicio verticalmente */
     color: #f0f0f0;
     background: rgba(30, 30, 30, 0.85);
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem; /* Aumenta el espacio entre las secciones principales */
     transition: all 0.3s ease;
 }
 
@@ -133,11 +140,68 @@
     box-shadow: 0 2px 8px rgba(255, 183, 3, 0.1);
 }
 
-.match-info {
-    flex: 1 1 200px;
-    font-weight: 600;
+.match-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     min-width: 200px;
 }
+
+.match-info-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.team-names {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.team-name {
+    padding: 0.2rem 0;
+}
+
+.scores-display {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #ffb703;
+    text-align: right;
+    min-width: 30px;
+}
+
+.score-value {
+    padding: 0.2rem 0;
+}
+
+.score-placeholder {
+    padding: 0.2rem 0;
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+/* display del ganador */
+.winner-display {
+    font-size: 0.85em;
+    color: #a3a3a3;
+    margin-top: 0.8rem;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.winner-display.winner-placeholder {
+    height: 1em;
+    margin-top: 0.8rem;
+    visibility: hidden;
+}
+
 
 .match-actions {
     display: flex;
@@ -148,18 +212,44 @@
 
 form.match-form {
     display: flex;
-    gap: 0.75rem;
     align-items: center;
     margin: 0;
     flex-wrap: wrap;
+    gap: 0.5rem;
     flex: 1;
+    min-width: 250px;
 }
 
-.match-form select.form-control {
-    width: auto;
-    min-width: 160px;
-    flex: 1;
+.score-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex-grow: 1;
+    min-width: 120px;
 }
+
+.team-score-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.match-score-input {
+    width: 60px; /* Ancho fijo para los inputs de score */
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 1rem;
+    background: #1a1a1a;
+    color: #eee;
+    border: 1px solid #444;
+    border-radius: 4px;
+}
+
+.match-score-input:focus {
+    border-color: #ffb703;
+    box-shadow: 0 0 0 2px rgba(255, 183, 3, 0.2);
+}
+
 
 .form-eliminar-enfrentamiento {
     margin: 0;
@@ -235,6 +325,17 @@ form.match-form {
     justify-content: flex-end;
 }
 
+/* Clases para feedback visual */
+.highlight-success {
+    box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.7);
+    transition: box-shadow 0.3s ease-out;
+}
+.highlight-error {
+    box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.7);
+    transition: box-shadow 0.3s ease-out;
+}
+
+
 @media (max-width: 768px) {
     .staff-home-container {
         padding: 1rem;
@@ -252,17 +353,65 @@ form.match-form {
         gap: 1rem;
     }
     
-    .match-actions {
+    .match-details {
+        flex-direction: column;
+        align-items: flex-start;
         width: 100%;
     }
     
+    .match-info-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .team-names, .scores-display {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .scores-display {
+        text-align: left;
+    }
+    .winner-display {
+        text-align: center;
+        margin-left: 0;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    .winner-display.winner-placeholder {
+        margin-top: 0.5rem;
+    }
+
+
+    .match-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     form.match-form {
         width: 100%;
+        min-width: unset;
     }
     
     .match-form select.form-control {
         width: 100%;
         min-width: 100%;
+    }
+
+    .score-input-group {
+        flex-direction: row;
+        gap: 0.75rem;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .team-score-input {
+        flex: 1;
+    }
+    .match-score-input {
+        width: 100%;
     }
     
     .modal-content {
@@ -375,27 +524,45 @@ form.match-form {
 
         {% for match in fase.enfrentamientos.all %}
         <div class="match-card" id="match-{{ match.id }}">
-            <div class="match-info">
-                <strong>{{ match.equipo1.nombre }}</strong> vs <strong>{{ match.equipo2.nombre }}</strong>
-                {% if match.completado %} 
-                <div style="margin-top: 0.5rem; color: #ffb703;">
-                    Ganador: {{ match.ganador.nombre }}
+            <div class="match-details"> {# Contenedor principal de los nombres, scores y ganador #}
+                <div class="match-info-top"> {# Nuevo contenedor para team-names y scores-display #}
+                    <div class="team-names">
+                        <div class="team-name"><strong>{{ match.equipo1.nombre }}</strong></div>
+                        <div class="team-name"><strong>{{ match.equipo2.nombre }}</strong></div>
+                    </div>
+                    <div class="scores-display" id="match-result-display-{{ match.id }}"> {# ID específico para JS #}
+                        {% if match.completado %} 
+                            <div class="score-value">{{ match.score_equipo1|default:"0" }}</div>
+                            <div class="score-value">{{ match.score_equipo2|default:"0" }}</div>
+                        {% else %}
+                            <div class="score-placeholder">Pendiente</div>
+                            <div class="score-placeholder"></div> {# Placeholder para mantener la alineación de scores #}
+                        {% endif %}
+                    </div>
                 </div>
+                {% if match.completado %} 
+                    <div class="winner-display">Ganador: {{ match.ganador.nombre|default:"Empate" }}</div>
+                {% else %}
+                    <div class="winner-display winner-placeholder"></div> {# Placeholder para la fila del ganador #}
                 {% endif %}
             </div>
 
             <div class="match-actions">
-                <form method="post" action="{% url 'asignar_ganador' match.id %}" class="match-form">
+                {# Formulario para cargar scores (AJAX) #}
+                <form onsubmit="event.preventDefault(); updateMatchResult(this);" class="match-form match-score-form" data-match-id="{{ match.id }}">
                     {% csrf_token %}
-                    <input type="hidden" name="volver_a" value="match-{{ match.id }}">
-                    <select name="ganador" class="form-control" required>
-                        <option value="" disabled selected>Seleccionar ganador</option>
-                        <option value="{{ match.equipo1.id }}">{{ match.equipo1.nombre }}</option>
-                        <option value="{{ match.equipo2.id }}">{{ match.equipo2.nombre }}</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm">Asignar</button>
+                    <div class="score-input-group"> {# Agrupación para inputs de score y botón #}
+                        <div class="team-score-input">
+                            <input type="number" name="score_equipo1" placeholder="Score {{ match.equipo1.abreviatura|default:match.equipo1.nombre }}" class="form-control match-score-input" value="{{ match.score_equipo1|default:'' }}" min="0">
+                        </div>
+                        <div class="team-score-input">
+                            <input type="number" name="score_equipo2" placeholder="Score {{ match.equipo2.abreviatura|default:match.equipo2.nombre }}" class="form-control match-score-input" value="{{ match.score_equipo2|default:'' }}" min="0">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-sm">Guardar</button>
                 </form>
 
+                {# Botón de eliminar enfrentamiento #}
                 <form method="post" action="{% url 'eliminar_enfrentamiento' match.id %}" class="form-eliminar-enfrentamiento">
                     {% csrf_token %}
                     <button type="button" class="btn-eliminar-enfrentamiento" 
@@ -413,7 +580,6 @@ form.match-form {
     {% endfor %}
 </div>
 
-<!-- Modal para eliminar fase -->
 <div id="modalEliminarFase" class="modal">
     <div class="modal-content">
         <h3>Confirmar Eliminación</h3>
@@ -428,7 +594,6 @@ form.match-form {
     </div>
 </div>
 
-<!-- Modal para eliminar enfrentamiento -->
 <div id="modalEliminarEnfrentamiento" class="modal">
     <div class="modal-content">
         <h3>Confirmar Eliminación</h3>
@@ -445,6 +610,135 @@ form.match-form {
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Función para obtener el token CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // --- función para actualizar el resultado vía AJAX ---
+    async function updateMatchResult(form) {
+        const matchId = form.getAttribute('data-match-id');
+        const scoreEquipo1 = form.querySelector('[name="score_equipo1"]').value;
+        const scoreEquipo2 = form.querySelector('[name="score_equipo2"]').value;
+        const csrfToken = getCookie('csrftoken');
+
+        const matchCard = document.getElementById(`match-${matchId}`);
+        const matchDetails = matchCard.querySelector('.match-details');
+        
+        try {
+            const response = await fetch(`/actualizar_resultado_enfrentamiento/${matchId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    score_equipo1: scoreEquipo1,
+                    score_equipo2: scoreEquipo2
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Reconstruir el contenido de match-details
+                let newMatchDetailsContent = `
+                    <div class="match-info-top">
+                        <div class="team-names">
+                            <div class="team-name"><strong>${data.equipo1_nombre}</strong></div>
+                            <div class="team-name"><strong>${data.equipo2_nombre}</strong></div>
+                        </div>
+                        <div class="scores-display" id="match-result-display-${matchId}">
+                `;
+
+                if (data.completado) {
+                    newMatchDetailsContent += `
+                            <div class="score-value">${data.score_equipo1}</div>
+                            <div class="score-value">${data.score_equipo2}</div>
+                        </div>
+                    </div>
+                    <div class="winner-display">Ganador: ${data.ganador_nombre || 'Empate'}</div>
+                    `;
+                } else {
+                    newMatchDetailsContent += `
+                            <div class="score-placeholder">Pendiente</div>
+                            <div class="score-placeholder"></div>
+                        </div>
+                    </div>
+                    <div class="winner-display winner-placeholder"></div>
+                    `;
+                }
+                matchDetails.innerHTML = newMatchDetailsContent;
+                
+                // Resaltar la tarjeta para feedback visual
+                matchCard.classList.add('highlight-success');
+                setTimeout(() => {
+                    matchCard.classList.remove('highlight-success');
+                }, 1500); // Quitar el resaltado después de 1.5 segundos
+
+            } else {
+                console.error('Error al actualizar resultado:', data.error);
+                let errorHtml = `
+                    <div class="match-info-top">
+                        <div class="team-names">
+                            <div class="team-name"><strong>${data.equipo1_nombre || 'Equipo 1'}</strong></div>
+                            <div class="team-name"><strong>${data.equipo2_nombre || 'Equipo 2'}</strong></div>
+                        </div>
+                        <div class="scores-display" id="match-result-display-${matchId}">
+                            <div class="score-placeholder">Error</div>
+                            <div class="score-placeholder"></div>
+                        </div>
+                    </div>
+                    <div class="winner-display winner-placeholder"></div>
+                `;
+                matchDetails.innerHTML = errorHtml;
+
+                matchCard.classList.add('highlight-error');
+                setTimeout(() => {
+                    matchCard.classList.remove('highlight-error');
+                }, 1500);
+            }
+        } catch (error) {
+            console.error('Error de red o del servidor:', error);
+            // Manejo de errores de red
+            let errorHtml = `
+                <div class="match-info-top">
+                    <div class="team-names">
+                        <div class="team-name"><strong>Error</strong></div>
+                        <div class="team-name"><strong>De Red</strong></div>
+                    </div>
+                    <div class="scores-display" id="match-result-display-${matchId}">
+                        <div class="score-placeholder">Error</div>
+                        <div class="score-placeholder"></div>
+                    </div>
+                </div>
+                <div class="winner-display winner-placeholder"></div>
+            `;
+            matchDetails.innerHTML = errorHtml;
+            matchCard.classList.add('highlight-error');
+            setTimeout(() => {
+                matchCard.classList.remove('highlight-error');
+            }, 1500);
+        } finally {
+            matchCard.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Centrar el elemento
+        }
+    }
+
+    // Hacer la función disponible globalmente
+    window.updateMatchResult = updateMatchResult;
+
+
     // Modal eliminar fase
     const modalFase = document.getElementById('modalEliminarFase');
     const nombreFaseModal = document.getElementById('nombreFaseModal');
