@@ -171,6 +171,10 @@ class Fase(models.Model):
     es_eliminatoria = models.BooleanField(default=False)
     orden = models.PositiveIntegerField(help_text="Orden cronológico de la fase")
 
+    @property
+    def completada(self):
+        return self.enfrentamientos.exists() and all(e.completado for e in self.enfrentamientos.all())
+
     def __str__(self):
         if self.grupo:
             return f"{self.get_nombre_display()} - Grupo {self.grupo}"
