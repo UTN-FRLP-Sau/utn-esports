@@ -6,8 +6,8 @@
 <style>
 /* Colores y tipografía general */
 body {
-    background-color: #1a1a1a; /* Fondo oscuro */
-    color: #e0e0e0; /* Texto claro */
+    background-color: #1a1a1a;
+    color: #e0e0e0;
     font-family: 'Arial', sans-serif;
 }
 
@@ -15,7 +15,7 @@ body {
     max-width: 900px;
     padding: 15px !important;
     padding: 0 1.5rem;
-    margin: auto; /* Centrar el contenedor */
+    margin: auto;
 }
 
 .tournament-header {
@@ -31,7 +31,7 @@ body {
 }
 
 .tournament-header p {
-    color: #b0b0b0; /* Un gris un poco más claro para el texto secundario */
+    color: #b0b0b0;
     font-size: 1.1rem;
     max-width: 700px;
     margin: 0 auto;
@@ -40,14 +40,14 @@ body {
 
 .fase-container {
     margin-bottom: 3.5rem;
-    background: #252525; /* Fondo más oscuro para la fase */
+    background: #252525;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
 
 .fase-header {
-    background: linear-gradient(135deg, #4a00e0, #8e2de2); /* Un gradiente púrpura/azul oscuro */
+    background: linear-gradient(135deg, #4a00e0, #8e2de2);
     color: white;
     padding: 1.2rem 1.5rem;
     display: flex;
@@ -62,7 +62,7 @@ body {
 }
 
 .fase-status {
-    background: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente para el estado */
+    background: rgba(0, 0, 0, 0.4);
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.9rem;
@@ -77,48 +77,53 @@ body {
 .match-card {
     display: flex;
     align-items: center;
-    padding: 0.8rem 1.2rem; /* Padding ajustado */
-    margin-bottom: 0.8rem; /* Margen ajustado */
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 0.8rem;
     border-radius: 8px;
-    background: #333333; /* Fondo para la tarjeta de partido */
-    transition: all 0.2s ease; /* Transición más rápida */
-    color: #e0e0e0; /* Color de texto general */
+    background: #333333;
+    transition: all 0.2s ease;
+    color: #e0e0e0;
 }
 
 .match-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra más fuerte al pasar el ratón */
-    background: #3a3a3a; /* Ligeramente más claro al pasar el ratón */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: #3a3a3a;
 }
 
 .match-card.my-team {
-    border-left: 4px solid #ff00c6; /* Borde rosa para tu equipo */
-    background: #3a2a35; /* Fondo ligeramente diferente para tu equipo */
+    border-left: 4px solid #ff00c6;
+    background: #3a2a35;
+}
+
+.my-team-name {
+    color: #ff00c6;
+    font-weight: 700;
 }
 
 .match-date-time {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 1.5rem; /* Espacio a la derecha de la fecha/hora */
-    min-width: 60px; /* Ancho mínimo para la columna de fecha/hora */
+    margin-right: 1.5rem;
+    min-width: 60px;
     text-align: center;
     line-height: 1.2;
 }
 
 .match-date-time .date {
     font-size: 0.9em;
-    color: #aaaaaa;
+    color: #cdcdcd;
     margin-bottom: 0.2em;
 }
 
 .match-date-time .time {
     font-size: 0.9em;
-    color: #aaaaaa;
+    color: #cdcdcd;
 }
 
 .match-details {
-    flex-grow: 1; /* Permite que los detalles del partido ocupen el espacio restante */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
@@ -126,7 +131,7 @@ body {
 .team-row {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Alinea los nombres y los scores a los extremos */
+    justify-content: space-between;
     padding: 0.2rem 0;
 }
 
@@ -136,10 +141,10 @@ body {
 }
 
 .team-logo {
-    width: 24px; /* Tamaño del logo */
+    width: 24px;
     height: 24px;
     margin-right: 0.8rem;
-    object-fit: contain; /* Asegura que la imagen se ajuste sin distorsión */
+    object-fit: contain;
 }
 
 .team-name {
@@ -151,16 +156,22 @@ body {
 .team-score {
     font-size: 1.1em;
     font-weight: bold;
-    color: #ffffff; /* Color blanco para los scores */
-    min-width: 20px; /* Ancho mínimo para alinear scores */
+    color: #ffffff;
+    min-width: 20px;
     text-align: right;
 }
 
-/* Colores de resultado (estos ya no son tan relevantes si el score se muestra directamente) */
-.result-winner { color: #5cb85c; } /* Verde para ganador */
-.result-loser { color: #d9534f; } /* Rojo para perdedor */
-.result-draw { color: #f0ad4e; } /* Amarillo para empate */
-.result-pending { color: #808080; } /* Gris para pendiente */
+/* Estilo para el equipo ganador */
+.winner-team-name {
+    color: #ff00c6;
+    font-weight: 700;
+}
+
+.winner-team-score {
+    color: #ff00c6;
+    font-weight: 900;
+}
+
 
 .empty-message {
     text-align: center;
@@ -179,11 +190,11 @@ body {
     .match-date-time {
         margin-right: 0;
         margin-bottom: 0.8rem;
-        align-self: flex-start; /* Alinea la fecha/hora a la izquierda */
+        align-self: flex-start;
     }
 
     .match-details {
-        width: 100%; /* Ocupa todo el ancho disponible */
+        width: 100%;
     }
 
     .fase-header {
@@ -262,10 +273,17 @@ body {
                                         {# Proporciona una imagen por defecto si no hay logo. Asegúrate de que esta ruta sea válida. #}
                                         <img src="{% static 'images/default_team_logo.png' %}" alt="Default logo" class="team-logo">
                                     {% endif %}
-                                    <span class="team-name {% if match.equipo1.id == jugador.equipo.id %}my-team-name{% endif %}">{{ match.equipo1.nombre }}</span>
+                                    <span class="team-name 
+                                        {% if match.equipo1.id == jugador.equipo.id %}my-team-name{% endif %} 
+                                        {% if match.ganador and match.ganador.id == match.equipo1.id %}winner-team-name{% endif %}">
+                                        {{ match.equipo1.nombre }}
+                                    </span>
                                 </div>
                                 {# Asumiendo que 'match' tiene atributos para los scores, por ejemplo 'score_equipo1' #}
-                                <span class="team-score">{{ match.score_equipo1|default:"-" }}</span> 
+                                <span class="team-score 
+                                    {% if match.ganador and match.ganador.id == match.equipo1.id %}winner-team-score{% endif %}">
+                                    {{ match.score_equipo1|default:"-" }}
+                                </span> 
                             </div>
                             <div class="team-row">
                                 <div class="team-info">
@@ -276,10 +294,17 @@ body {
                                         {# Proporciona una imagen por defecto si no hay logo. Asegúrate de que esta ruta sea válida. #}
                                         <img src="{% static 'images/default_team_logo.png' %}" alt="Default logo" class="team-logo">
                                     {% endif %}
-                                    <span class="team-name {% if match.equipo2.id == jugador.equipo.id %}my-team-name{% endif %}">{{ match.equipo2.nombre }}</span>
+                                    <span class="team-name 
+                                        {% if match.equipo2.id == jugador.equipo.id %}my-team-name{% endif %} 
+                                        {% if match.ganador and match.ganador.id == match.equipo2.id %}winner-team-name{% endif %}">
+                                        {{ match.equipo2.nombre }}
+                                    </span>
                                 </div>
                                 {# Asumiendo que 'match' tiene atributos para los scores, por ejemplo 'score_equipo2' #}
-                                <span class="team-score">{{ match.score_equipo2|default:"-" }}</span> 
+                                <span class="team-score 
+                                    {% if match.ganador and match.ganador.id == match.equipo2.id %}winner-team-score{% endif %}">
+                                    {{ match.score_equipo2|default:"-" }}
+                                </span> 
                             </div>
                         </div>
                     </div>
