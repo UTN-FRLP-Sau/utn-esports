@@ -909,7 +909,7 @@ class CrearEnfrentamientoView(LoginRequiredMixin, StaffRequiredMixin, View):
         
         return redirect('gestionar_competencia')
 
-class AsignarGanadorView(LoginRequiredMixin, StaffRequiredMixin, View):
+'''class AsignarGanadorView(LoginRequiredMixin, StaffRequiredMixin, View):
     def post(self, request, enfrentamiento_id):
         ganador_id = request.POST.get("ganador")
         enfrentamiento = Enfrentamiento.objects.get(pk=enfrentamiento_id)
@@ -920,7 +920,7 @@ class AsignarGanadorView(LoginRequiredMixin, StaffRequiredMixin, View):
         url = reverse('gestionar_competencia')
         if id_ancla:
             url += f"#{id_ancla}"
-        return redirect(url)
+        return redirect(url)'''
 
 
 class EliminarFaseView(LoginRequiredMixin, StaffRequiredMixin, View):
@@ -934,3 +934,64 @@ class EliminarEnfrentamientoView(LoginRequiredMixin, StaffRequiredMixin, View):
         enfrentamiento = get_object_or_404(Enfrentamiento, pk=pk)
         enfrentamiento.delete()
         return redirect('gestionar_competencia')
+    
+
+class ActualizarResultadoEnfrentamientoView(LoginRequiredMixin, StaffRequiredMixin, View):
+    def post(self, request, pk):
+        enfrentamiento = get_object_or_404(Enfrentamiento, pk=pk)
+        
+        try:
+            # Los datos vienen como JSON en el body de la petición AJAX
+            data = json.loads(request.body)
+            score_equipo1_str = data.get("score_equipo1")
+            score_equipo2_str = data.get("score_equipo2")
+
+            # Convierte scores a enteros. Si están vacíos, None.
+            score_equipo1 = int(score_equipo1_str) if score_equipo1_str else None
+            score_equipo2 = int(score_equipo2_str) if score_equipo2_str else None
+
+            enfrentamiento.score_equipo1 = score_equipo1
+            enfrentamiento.score_equipo2 = score_equipo2
+
+            response_data = {
+                'success': True,
+                'score_equipo1': score_equipo1,
+                'score_equipo2': score_equipo2,
+                'completado': False,
+                'ganador_nombre': None,
+                'ganador_id': None,
+                'message': 'Resultado guardado.'
+            }
+
+            # Lógica para determinar el ganador automáticamente si los scores están presentes
+            if score_equipo1 is not None and score_equipo2 is not None:
+                enfrentamiento.completado = True
+                if score_equipo1 > score_equipo2:
+                    enfrentamiento.ganador = enfrentamiento.equipo1
+                    response_data['ganador_nombre'] = enfrentamiento.equipo1.nombre
+                    response_data['ganador_id'] = enfrentamiento.equipo1.id
+                elif score_equipo2 > score_equipo1:
+                    enfrentamiento.ganador = enfrentamiento.equipo2
+                    response_data['ganador_nombre'] = enfrentamiento.equipo2.nombre
+                    response_data['ganador_id'] = enfrentamiento.equipo2.id
+                else: # Empate
+                    enfrentamiento.ganador = None 
+                    response_data['ganador_nombre'] = "Empate"
+                    response_data['ganador_id'] = None
+                response_data['completado'] = True
+            else:
+                # Si los scores no están completos, el partido no está completado y no hay ganador definido por score
+                enfrentamiento.completado = False
+                enfrentamiento.ganador = None
+                response_data['message'] = 'Scores incompletos, partido pendiente.'
+
+            enfrentamiento.save()
+            return JsonResponse(response_data)
+
+        except (ValueError, json.JSONDecodeError) as e:
+            # Maneja el caso donde los scores no son números válidos o el JSON es incorrecto
+            print(f"Error en datos de entrada: {e}")
+            return JsonResponse({'success': False, 'error': 'Datos de score inválidos.'}, status=400)
+        except Exception as e:
+            print(f"Error inesperado al actualizar resultado: {e}")
+            return JsonResponse({'success': False, 'error': 'Ocurrió un error en el servidor.'}, status=500)
