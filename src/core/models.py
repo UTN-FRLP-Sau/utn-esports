@@ -174,6 +174,11 @@ class Fase(models.Model):
     @property
     def completada(self):
         return self.enfrentamientos.exists() and all(e.completado for e in self.enfrentamientos.all())
+    
+    @property
+    def no_comenzo(self):
+        return not self.enfrentamientos.exists()
+
 
     def __str__(self):
         if self.grupo:
