@@ -258,7 +258,7 @@ body {
                     <div class="match-card {% if match.equipo1.id == jugador.equipo.id or match.equipo2.id == jugador.equipo.id %}my-team{% endif %}">
                         {% if match.fecha %}
                         <div class="match-date-time">
-                            <span class="date">{{ match.fecha|date:"d.m" }}</span> {# Formato DD.MM #}
+                            <span class="date">{{ match.fecha|date:"d/m/y" }}</span> {# Formato DD/MM/YYYY #}
                             <span class="time">{{ match.fecha|date:"H:i" }}</span> {# Formato HH:MM #}
                         </div>
                         {% endif %}
