@@ -4,10 +4,18 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/player/home.css' %}">
 <style>
+/* Colores y tipografía general */
+body {
+    background-color: #1a1a1a; /* Fondo oscuro */
+    color: #e0e0e0; /* Texto claro */
+    font-family: 'Arial', sans-serif;
+}
+
 .profile-container {
     max-width: 900px;
     padding: 15px !important;
     padding: 0 1.5rem;
+    margin: auto; /* Centrar el contenedor */
 }
 
 .tournament-header {
@@ -23,7 +31,7 @@
 }
 
 .tournament-header p {
-    color: #ffffff;
+    color: #b0b0b0; /* Un gris un poco más claro para el texto secundario */
     font-size: 1.1rem;
     max-width: 700px;
     margin: 0 auto;
@@ -32,14 +40,14 @@
 
 .fase-container {
     margin-bottom: 3.5rem;
-    background: #040404cc;
+    background: #252525; /* Fondo más oscuro para la fase */
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
     overflow: hidden;
 }
 
 .fase-header {
-    background: linear-gradient(135deg, #db349b, #1d77cc);
+    background: linear-gradient(135deg, #4a00e0, #8e2de2); /* Un gradiente púrpura/azul oscuro */
     color: white;
     padding: 1.2rem 1.5rem;
     display: flex;
@@ -54,103 +62,105 @@
 }
 
 .fase-status {
-    background: rgb(11 11 11 / 87%);
+    background: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente para el estado */
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.9rem;
+    color: #e0e0e0;
 }
 
 .matches-container {
     padding: 1.5rem;
 }
 
+/* Estilos de la tarjeta de partido */
 .match-card {
     display: flex;
     align-items: center;
-    padding: 1.2rem;
-    margin-bottom: 1rem;
+    padding: 0.8rem 1.2rem; /* Padding ajustado */
+    margin-bottom: 0.8rem; /* Margen ajustado */
     border-radius: 8px;
-    border-left: 4px solid #000000a3;
-    background: #0000009c;
-    transition: all 0.3s ease;
+    background: #333333; /* Fondo para la tarjeta de partido */
+    transition: all 0.2s ease; /* Transición más rápida */
+    color: #e0e0e0; /* Color de texto general */
 }
 
 .match-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    background: rgb(0, 0, 0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra más fuerte al pasar el ratón */
+    background: #3a3a3a; /* Ligeramente más claro al pasar el ratón */
 }
 
 .match-card.my-team {
-    border-left: 4px solid #000000a3;
-    background: #0000009c;
+    border-left: 4px solid #ff00c6; /* Borde rosa para tu equipo */
+    background: #3a2a35; /* Fondo ligeramente diferente para tu equipo */
 }
 
-.match-teams {
-    flex: 1;
+.match-date-time {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
+    margin-right: 1.5rem; /* Espacio a la derecha de la fecha/hora */
+    min-width: 60px; /* Ancho mínimo para la columna de fecha/hora */
+    text-align: center;
+    line-height: 1.2;
 }
 
-.team {
+.match-date-time .date {
+    font-size: 0.9em;
+    color: #aaaaaa;
+    margin-bottom: 0.2em;
+}
+
+.match-date-time .time {
+    font-size: 0.9em;
+    color: #aaaaaa;
+}
+
+.match-details {
+    flex-grow: 1; /* Permite que los detalles del partido ocupen el espacio restante */
+    display: flex;
+    flex-direction: column;
+}
+
+.team-row {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Alinea los nombres y los scores a los extremos */
+    padding: 0.2rem 0;
+}
+
+.team-info {
+    display: flex;
+    align-items: center;
+}
+
+.team-logo {
+    width: 24px; /* Tamaño del logo */
+    height: 24px;
+    margin-right: 0.8rem;
+    object-fit: contain; /* Asegura que la imagen se ajuste sin distorsión */
+}
+
+.team-name {
     font-weight: 500;
-    color: #ffffff;
+    color: #e0e0e0;
+    font-size: 1.05rem;
 }
 
-.team.my-team {
-    color: #ff00c6;
-    font-weight: 600;
-}
-
-.vs-separator {
-    color: #95a5a6;
-    font-weight: 300;
-    padding: 0 0.5rem;
-}
-
-.match-result {
-    min-width: 160px;
+.team-score {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #ffffff; /* Color blanco para los scores */
+    min-width: 20px; /* Ancho mínimo para alinear scores */
     text-align: right;
 }
 
-.result-badge {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-.result-pending {
-    color: #f1b80a;
-    font-size: large;
-}
-
-.result-winner {
-    color: #23a928;
-    font-size: large;
-}
-
-.result-loser {
-    color: #cb1c1c;
-    font-size: large;
-}
-
-.result-draw {
-    color: #383d41;
-    font-size: large;
-}
-
-.match-date {
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-    display: block;
-}
+/* Colores de resultado (estos ya no son tan relevantes si el score se muestra directamente) */
+.result-winner { color: #5cb85c; } /* Verde para ganador */
+.result-loser { color: #d9534f; } /* Rojo para perdedor */
+.result-draw { color: #f0ad4e; } /* Amarillo para empate */
+.result-pending { color: #808080; } /* Gris para pendiente */
 
 .empty-message {
     text-align: center;
@@ -159,23 +169,23 @@
     font-style: italic;
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
     .match-card {
         flex-direction: column;
         align-items: flex-start;
     }
     
-    .match-result {
-        text-align: left;
-        margin-top: 1rem;
-        width: 100%;
+    .match-date-time {
+        margin-right: 0;
+        margin-bottom: 0.8rem;
+        align-self: flex-start; /* Alinea la fecha/hora a la izquierda */
     }
-    
-    .result-badge {
-        display: block;
-        text-align: center;
+
+    .match-details {
+        width: 100%; /* Ocupa todo el ancho disponible */
     }
-    
+
     .fase-header {
         flex-direction: column;
         align-items: flex-start;
@@ -196,18 +206,13 @@
         font-size: 1.8rem;
     }
     
-    .team {
-        flex: 1 1 100%;
+    .team-name {
+        font-size: 1rem;
     }
-    
-    .vs-separator {
-        display: none;
-    }
-    
-    .match-teams {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
+
+    .team-logo {
+        width: 20px;
+        height: 20px;
     }
 }
 </style>
@@ -217,7 +222,7 @@
 <div class="profile-container">
     <div class="tournament-header">
         <h2>Leyendas del Sur</h2>
-        <p>Visualizá los enfrentamientos y resultados del torneo. Los partidos de tu equipo están resaltados en rosa.</p>
+        <p>Visualizá los enfrentamientos y resultados del torneo. Los partidos de tu equipo están resaltados.</p>
     </div>
 
     {% if fases_y_enfrentamientos %}
@@ -240,37 +245,42 @@
                 {% if item.enfrentamientos %}
                     {% for match in item.enfrentamientos %}
                     <div class="match-card {% if match.equipo1.id == jugador.equipo.id or match.equipo2.id == jugador.equipo.id %}my-team{% endif %}">
-                        <div class="match-teams">
-                            <span class="team {% if match.equipo1.id == jugador.equipo.id %}my-team{% endif %}">
-                                {{ match.equipo1.nombre }}
-                            </span>
-                            <span class="vs-separator">vs</span>
-                            <span class="team {% if match.equipo2.id == jugador.equipo.id %}my-team{% endif %}">
-                                {{ match.equipo2.nombre }}
-                            </span>
-                            {% if match.fecha %}
-                                <span class="match-date">
-                                    {{ match.fecha|date:"d/m/Y H:i" }}
-                                </span>
-                            {% endif %}
+                        {% if match.fecha %}
+                        <div class="match-date-time">
+                            <span class="date">{{ match.fecha|date:"d.m" }}</span> {# Formato DD.MM #}
+                            <span class="time">{{ match.fecha|date:"H:i" }}</span> {# Formato HH:MM #}
                         </div>
-                        
-                        <div class="match-result">
-                            {% if match.completado %}
-                                {% if match.ganador %}
-                                    {% if match.ganador.id == jugador.equipo.id %}
-                                        <span class="result-badge result-winner">Ganaste</span>
-                                    {% elif match.equipo1.id == jugador.equipo.id or match.equipo2.id == jugador.equipo.id %}
-                                        <span class="result-badge result-loser">Perdiste</span>
+                        {% endif %}
+
+                        <div class="match-details">
+                            <div class="team-row">
+                                <div class="team-info">
+                                    {# Usar .logo.url para acceder a la URL del ImageField #}
+                                    {% if match.equipo1.logo %} 
+                                        <img src="{{ match.equipo1.logo.url }}" alt="{{ match.equipo1.nombre }} logo" class="team-logo">
                                     {% else %}
-                                        <span class="result-badge result-winner">Ganó {{ match.ganador.nombre_abreviado|default:match.ganador.nombre }}</span>
+                                        {# Proporciona una imagen por defecto si no hay logo. Asegúrate de que esta ruta sea válida. #}
+                                        <img src="{% static 'images/default_team_logo.png' %}" alt="Default logo" class="team-logo">
                                     {% endif %}
-                                {% else %}
-                                    <span class="result-badge result-draw">Empate</span>
-                                {% endif %}
-                            {% else %}
-                                <span class="result-badge result-pending">Pendiente</span>
-                            {% endif %}
+                                    <span class="team-name {% if match.equipo1.id == jugador.equipo.id %}my-team-name{% endif %}">{{ match.equipo1.nombre }}</span>
+                                </div>
+                                {# Asumiendo que 'match' tiene atributos para los scores, por ejemplo 'score_equipo1' #}
+                                <span class="team-score">{{ match.score_equipo1|default:"-" }}</span> 
+                            </div>
+                            <div class="team-row">
+                                <div class="team-info">
+                                    {# Usar .logo.url para acceder a la URL del ImageField #}
+                                    {% if match.equipo2.logo %}
+                                        <img src="{{ match.equipo2.logo.url }}" alt="{{ match.equipo2.nombre }} logo" class="team-logo">
+                                    {% else %}
+                                        {# Proporciona una imagen por defecto si no hay logo. Asegúrate de que esta ruta sea válida. #}
+                                        <img src="{% static 'images/default_team_logo.png' %}" alt="Default logo" class="team-logo">
+                                    {% endif %}
+                                    <span class="team-name {% if match.equipo2.id == jugador.equipo.id %}my-team-name{% endif %}">{{ match.equipo2.nombre }}</span>
+                                </div>
+                                {# Asumiendo que 'match' tiene atributos para los scores, por ejemplo 'score_equipo2' #}
+                                <span class="team-score">{{ match.score_equipo2|default:"-" }}</span> 
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
