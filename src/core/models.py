@@ -191,6 +191,8 @@ class Enfrentamiento(models.Model):
     fase = models.ForeignKey(Fase, on_delete=models.CASCADE, related_name='enfrentamientos')
     equipo1 = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='enfrentamientos_como_local')
     equipo2 = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='enfrentamientos_como_visitante')
+    score_equipo1 = models.IntegerField(null=True, blank=True)
+    score_equipo2 = models.IntegerField(null=True, blank=True)
     fecha = models.DateTimeField()
     best_of = models.PositiveIntegerField(default=1)  # 1 para Bo1, 3 para Bo3
     completado = models.BooleanField(default=False)
