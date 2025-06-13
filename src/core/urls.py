@@ -39,10 +39,10 @@ urlpatterns = [
     path('staff/gestionar_competencia/', views.GestionarCompetenciaView.as_view(), name='gestionar_competencia'),
     path('staff/crear_fase/', views.CrearFaseView.as_view(), name='crear_fase'),
     path('staff/crear_enfrentamiento/', views.CrearEnfrentamientoView.as_view(), name='crear_enfrentamiento'),
-    path('staff/asignar_ganador/<int:enfrentamiento_id>/', views.AsignarGanadorView.as_view(), name='asignar_ganador'),
+    #path('staff/asignar_ganador/<int:enfrentamiento_id>/', views.AsignarGanadorView.as_view(), name='asignar_ganador'),
     path('eliminar_fase/<int:pk>/', views.EliminarFaseView.as_view(), name='eliminar_fase'),
     path('eliminar_enfrentamiento/<int:pk>/', views.EliminarEnfrentamientoView.as_view(), name='eliminar_enfrentamiento'),
-    
+    path('actualizar_resultado_enfrentamiento/<int:pk>/', views.ActualizarResultadoEnfrentamientoView.as_view(), name='actualizar_resultado_enfrentamiento'),
     # Clips Twitch
     path('staff/gestionar_clips/', views.GestionarClipsView.as_view(), name='gestionar_clips'),
     path('staff/cambiar_estado_clip/<int:clip_id>/', views.CambiarEstadoClipView.as_view(), name='cambiar_estado_clip'),
