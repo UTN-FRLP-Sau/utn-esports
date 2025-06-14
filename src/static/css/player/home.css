@@ -89,7 +89,7 @@ body::before {
 
 
 .btn-pay{
-    background-color: #28a745;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
     color: #fff;
 }
 
@@ -108,7 +108,7 @@ body::before {
 }
 
 .btn-pay:hover{
-    background-color: #23943e;
+    background: linear-gradient(90deg, #a200ff, #6a0dad);
 }
 
 
