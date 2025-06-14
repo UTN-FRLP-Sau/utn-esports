@@ -31,3 +31,7 @@ body::before {
     height: auto; 
     object-fit: contain;
 }
+
+#frecuentes p{
+    text-align: justify;
+}

@@ -27,6 +27,10 @@ body::before {
     scroll-margin-top: 70px;
 }
 
+#quienes-somos p {
+    text-align: justify;
+}
+
 #inscripcion {
     scroll-margin-top: 70px;
 }
