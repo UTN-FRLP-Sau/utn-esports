@@ -86,9 +86,7 @@ body::before {
     gap: 8px;
 }
 
-.btn-invite{
-    transition: background-color 0.3s ease;
-}
+
 
 .btn-pay{
     background-color: #28a745;
@@ -96,17 +94,17 @@ body::before {
 }
 
 .btn-edit {
-    background-color: #007bff;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
     color: #fff;
 }
 
 .btn-delete {
-    background-color: #dc3545;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
     color: #fff;
 }
 
 #btn-abandonar {
-    background-color: #dc5635 !important;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
 }
 
 .btn-pay:hover{
@@ -115,20 +113,21 @@ body::before {
 
 
 .btn-edit:hover {
-    background-color: #0056b3;
+    background: linear-gradient(90deg, #a200ff, #6a0dad);
+    color: black;
 }
 
 .btn-delete:hover {
-    background-color: #c82333;
+    background: linear-gradient(90deg, #a200ff, #6a0dad);
+    color: black;
 }
 
 #btn-abandonar:hover {
-    background-color: #da4520 !important;
-}
-
-.btn-invite:hover{
+    background: linear-gradient(90deg, #a200ff, #6a0dad);
     color: black;
 }
+
+
 
 /* Estilos para la sección de miembros */
 .team-members {
@@ -177,7 +176,7 @@ body::before {
 }
 
 .btn-invite {
-    background-color: #28a745;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
     color: #fff;
     margin-top: 15px;
     padding: 8px 15px;
@@ -194,7 +193,8 @@ body::before {
 }
 
 .btn-invite:hover {
-    background-color: #218838;
+    background: linear-gradient(90deg, #a200ff, #6a0dad);
+    color: black;
 }
 
 .btn-invite .icon {
@@ -624,7 +624,7 @@ body::before {
     color: white;
 }
 .capitan-badge {
-    background-color: #4CAF50;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
     color: white;
     padding: 2px 6px;
     border-radius: 3px;
@@ -698,4 +698,34 @@ body::before {
 .disabled-pay:hover::after {
     opacity: 1;
     visibility: visible;
+}
+
+
+.btn-competencia {
+    display: block;
+    padding: 12px 25px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #6a0dad, #a200ff);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(106, 13, 173, 0.4);
+    text-align: center;
+}
+
+.btn-competencia:hover {
+    background: linear-gradient(90deg, #a200ff, #6a0dad);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(106, 13, 173, 0.6);
+}
+
+.btn-competencia:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(106, 13, 173, 0.3);
 }
