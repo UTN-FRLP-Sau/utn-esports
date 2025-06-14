@@ -45,8 +45,8 @@
     <hr>
     <h2>Gestion de Equipos</h2>
     <!-- Barra de busqueda y filtros -->
-    <div class="filtros-busqueda">
-        <form method="get" action="{% url 'staff_home' %}">
+    <div class="filtros-busqueda" id="filtros-busqueda">
+        <form method="get" action="{% url 'staff_home' %}#filtros-busqueda">
             <input type="text" name="search" placeholder="Buscar equipo..." value="{{ request.GET.search }}">
             <select name="estado">
                 <option value="">Todos los estados</option>
