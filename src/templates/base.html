@@ -64,12 +64,15 @@
                   <a class="dropdown-item" href="{% url 'player_home' %}">Mi Equipo</a>  <!-- home del jugador -->
                   {% endif %}        
               </li>
+              <li>
+                  <a class="dropdown-item" href="{% url 'ver_competencia' %}">Ver Competencia</a>
+              </li>   
+              <li>
               {% if request.user.jugador %}
                 <li>
                   <a class="dropdown-item" href="{% url 'perfil' %}">Ver Perfil</a>
                 </li>
-              {% endif %}      
-              <li>
+              {% endif %}   
                 <a href="#" class="dropdown-item" onclick="document.getElementById('logout-form').submit();">Cerrar
                   Sesión</a>
               </li>

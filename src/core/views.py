@@ -854,13 +854,24 @@ class CambiarEstadoInscripcionesView(LoginRequiredMixin, StaffRequiredMixin, Vie
         
         return redirect('staff_home')
     
-class VerCompetenciaView(LoginRequiredMixin, TemplateView):
+class VerCompetenciaView(TemplateView):
     template_name = 'player/ver_competencia.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        jugador = self.request.user.jugador
+        jugador = None # Inicializa jugador como None
+        
+        # Verifica si el usuario está autenticado antes de intentar acceder a 'jugador'
+        if self.request.user.is_authenticated:
+            try:
+                # Intenta obtener el objeto Jugador asociado al usuario
+                jugador = self.request.user.jugador
+            except Jugador.DoesNotExist:
+                # Si el usuario está autenticado pero no tiene un objeto Jugador,
+                # 'jugador' seguirá siendo None
+                pass 
+
         fases = Fase.objects.order_by('orden')
 
         lista_fases_y_enfrentamientos = [
